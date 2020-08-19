@@ -13,7 +13,9 @@ This is a webscraper that looks for gaming laptop on the CanadaComputers website
 
 ## Instructions
 To be able to run the script you must have Python and Pip installed, then you must Pip installs
-`$ pip install requests`
+~~~~
+$ pip install requests
+~~~~
 `<$ pip install pandas>`
 `<$ pip install bs4>`
 `<$ pip install lxml>`
