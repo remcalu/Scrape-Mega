@@ -1,180 +1,190 @@
-#https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming+laptop&page_num=2
+# Generate EXE with pyinstaller -F webscraper.py
 import requests
 import pandas as pd
+import numpy as np
 import smtplib 
 import time
+import re
 from email import encoders 
 from bs4 import BeautifulSoup
 
-# Set price ranges here
+##### Set price ranges here #####
 minimum = "500"
-maximum = "1100"
+maximum = "10000"
+##### Set price ranges here #####
 
 # Various computer specs
-gpuList = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1080ti", "1080", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m"]
-fancyGpuList = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1080Ti", "GTX 1080", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M"]
-ramList = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
-fancyRamList = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
-cpuList = ["3750h", "4600h", "4800h", "4900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7"]
-fancyCpuList = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "Intel i7-7700HQ", "Intel i5-8300H"," Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7"]
+gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1080ti", "1080", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m"]
+fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1080Ti", "GTX 1080", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M"]
+ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
+fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
+cpu_list = ["3750h", "4600h", "4800h", "4900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7"]
+fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "Intel i7-7700HQ", "Intel i5-8300H"," Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7"]
 
-# Getting data from CanadaComputers, checking for computers between $800 and $1500
+# Main loop that lasts forever and repeats every 20 minutes
 while(True):
-    productListLink = []
-    productListName = []
-    productListPrice = []
-    productListSaving = []
-    productListNameCPU = []
-    productListNameGPU = []
-    productListNameRAM = []
-    productAmount = 0
+    product_list_link = []
+    product_list_name = []
+    product_list_price = []
+    product_list_saving = []
+    product_list_name_cpu = []
+    product_list_name_gpu = []
+    product_list_name_ram = []
+    product_amount = 0
     found = 0
-    totalSales = 0
+    total_sales = 0
 
     # Getting data from Canada Computers
     for i in range(100):
-        checkIfProducts = 0
+        check_if_products = 0
 
-        siteStringTemplate = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
-        siteStringPage = siteStringTemplate + "&page_num=" + str(i)
+        site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
+        site_string_page = site_string_template + "&page_num=" + str(i)
     
-        result = requests.get(siteStringPage)
+        result = requests.get(site_string_page)
         source = result.content
         soup = BeautifulSoup(source, 'lxml')
-        products = soup.findAll('a', 'text-dark text-truncate_3')
+        products = soup.find_all('a', 'text-dark text-truncate_3')
         for product in products:
             link = product.attrs['href']
-            productListLink.append(link)
+            product_list_link.append(link)
 
-            productResult = requests.get(link)
-            productSource = productResult.content
-            productSoup = BeautifulSoup(productSource, 'lxml')
+            product_result = requests.get(link)
+            product_source = product_result.content
+            product_soup = BeautifulSoup(product_source, 'lxml')
 
-            descriptions = productSoup.findAll('h1')
+            descriptions = product_soup.find_all('h1')
             for description in descriptions:
                 if "gaming" in description.text.lower() or "laptop" in description.text.lower() or "notebook" in description.text.lower():
                     #print(description.text)
-                    productListName.append(description.text)
+                    product_list_name.append(description.text)
 
-            prices = productSoup.findAll('strong')
+            prices = product_soup.find_all('strong')
             for price in prices:
                 if "$" in price.text:
-                    print(price.text[1:])
-                    productListPrice.append(price.text[1:].replace(",", ""))
+                    #print(price.text)
+                    product_list_price.append(price.text[1:].replace(",", ""))
 
-            savings = productSoup.findAll('div', 'pi-price-discount')
+            savings = product_soup.find_all('div', 'pi-price-discount')
             for saving in savings:
                 if "$" in saving.text:
-                    savingValue = saving.text[8:].split('\n')
-                    discount = savingValue[1]
-                    print(discount[1:])
-                    productListSaving.append(discount[1:].replace(",", ""))
-                    totalSales+=1
+                    saving_value = saving.text[8:].split('\n')
+                    discount = saving_value[1]
+                    #print(discount[1:])
+                    product_list_saving.append(discount[1:].replace(",", ""))
+                    total_sales+=1
             if not savings:
-                productListSaving.append("0.00")
+                product_list_saving.append("0.00")
 
-            productAmount+=1
-            checkIfProducts = 1
-            print("Scanned:",productAmount,"products\n")
+            product_amount+=1
+            check_if_products = 1
+            print("Scanned:",product_amount,"products")
 
-        if checkIfProducts == 0:
+        if check_if_products == 0:
             break
-           
-    # Non site specific portion
-    print("Product Amount: [",productAmount,"]")
 
-    # Checking if new laptop added
+    # Checking if new laptop added by reading the saved values in the files laptopAmount.txt and salesAmount.txt
     f = open("laptopAmount.txt", "r")
     f2 = open("salesAmount.txt", "r")
-    oldTotalLaptops = f.read()
-    oldTotalLaptopSales = f2.read()
+    old_total_laptops = f.read()
+    old_total_laptop_sales = f2.read()
     f = open("laptopAmount.txt", "w")
     f2 = open("salesAmount.txt", "w")
-    f.write(str(productAmount)+" ")
-    totalLaptops = (str(productAmount)+" ")
-    f2.write(str(totalSales)+" ")
-    totalLaptopSales = (str(totalSales)+" ")
+    f.write(str(product_amount)+" ")
+    total_laptops = (str(product_amount)+" ")
+    f2.write(str(total_sales)+" ")
+    total_laptop_sales = (str(total_sales)+" ")
     f.close()
     f2.close()
 
-    productListNameCopy = productListName.copy()
-    for i in range(productAmount):
-        productListNameCopy[i] = productListNameCopy[i].replace(" ", "")
+    # Cleaning up the data that will be pushed to the spreadsheet
+    product_list_name_copy = product_list_name.copy()
+    for i in range(product_amount):
+        product_list_name_copy[i] = product_list_name_copy[i].replace(" ", "")
         # For RAM
-        for j in range(len(ramList)):
-            if ramList[j] in productListNameCopy[i].lower():
-                productListNameRAM.append(fancyRamList[j])
+        for j in range(len(ram_list)):
+            if ram_list[j] in product_list_name_copy[i].lower():
+                product_list_name_ram.append(fancy_ram_list[j])
                 found = 1
                 break
         if found == 0:
-            productListNameRAM.append("Unknown")
+            product_list_name_ram.append("Unknown")
         found = 0
         
-        # For GPUs (Only gpu's that I'd be intrested in)
-        for j in range(len(gpuList)):
-            if gpuList[j] in productListNameCopy[i].lower():
-                productListNameGPU.append(fancyGpuList[j])
+        # For GPUs
+        for j in range(len(gpu_list)):
+            if gpu_list[j] in product_list_name_copy[i].lower():
+                product_list_name_gpu.append(fancy_gpu_list[j])
                 found = 1
                 break
         if found == 0:
-            productListNameGPU.append("Unknown")
+            product_list_name_gpu.append("Unknown")
         found = 0
         
         # For CPUs
-        for j in range(len(cpuList)):
-            if cpuList[j] in productListNameCopy[i].lower():
-                productListNameCPU.append(fancyCpuList[j])
+        for j in range(len(cpu_list)):
+            if cpu_list[j] in product_list_name_copy[i].lower():
+                product_list_name_cpu.append(fancy_cpu_list[j])
                 found = 1
                 break
         if found == 0:
-            productListNameCPU.append("Unknown")
+            product_list_name_cpu.append("Unknown")
         found = 0
 
     # Create data frame
-    data = pd.DataFrame({'Links': productListLink, 'Descriptions': productListName, 'Prices': productListPrice, 'Savings': productListSaving, 'RAM': productListNameRAM, 'GPU': productListNameGPU, 'CPU': productListNameCPU})
+    data = pd.DataFrame({'Links': product_list_link, 'Descriptions': product_list_name, 'Prices': product_list_price, 'Savings': product_list_saving, 'RAM': product_list_name_ram, 'GPU': product_list_name_gpu, 'CPU': product_list_name_cpu})
     data.style.set_properties(**{'text-align': 'left'})
-    data['RAM'] = data['RAM'].astype(int)
+    for i in range(len(data['RAM'])):
+        if (data['RAM'][i] != 'Unknown'):
+            data['RAM'][i] = int(data['RAM'][i])
+
     data['Prices'] = data['Prices'].astype(float)
     data['Savings'] = data['Savings'].astype(float)
 
     # Write to excel
-    writer = pd.ExcelWriter("FromPython.xlsx",engine='xlsxwriter')
+    writer = pd.ExcelWriter("datasheet.xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
     workbook = writer.book
     worksheet = writer.sheets['Report']
-    moneyFMT = workbook.add_format({'num_format': '$#,##0', 'align': 'left'})
-    ramFMT = workbook.add_format({'align': 'left'})
+    money_fmt = workbook.add_format({'num_format': '$#,##0', 'align': 'left'})
+    ram_fmt = workbook.add_format({'align': 'left'})
 
     worksheet.set_column('B:B', 5)
-    worksheet.set_column('C:C', 150)
-    worksheet.set_column('D:D', 7, moneyFMT)
-    worksheet.set_column('E:E', 7, moneyFMT)
-    worksheet.set_column('F:F', 5, ramFMT)
+    worksheet.set_column('C:C', 100)
+    worksheet.set_column('D:D', 8, money_fmt)
+    worksheet.set_column('E:E', 8, money_fmt)
+    worksheet.set_column('F:F', 8, ram_fmt)
     worksheet.set_column('G:G', 17)
     worksheet.set_column('H:H', 15)
 
     # Set colors
-    greenFMT = workbook.add_format({'bg_color':'#92D050'})
-    redFMT = workbook.add_format({'bg_color':'#d05050'})
-    blueFMT = workbook.add_format({'bg_color':'#5074d0'})
-    orangeFMT = workbook.add_format({'bg_color':'#d09950'})
-    greyFMT = workbook.add_format({'bg_color':'#c7c7c7'})
+    green_fmt = workbook.add_format({'bg_color':'#92D050'})
+    red_fmt = workbook.add_format({'bg_color':'#d05050'})
+    blue_fmt = workbook.add_format({'bg_color':'#5074d0'})
+    orange_fmt = workbook.add_format({'bg_color':'#d09950'})
+    grey_fmt = workbook.add_format({'bg_color':'#c7c7c7'})
+    purple_fmt = workbook.add_format({'bg_color':'#ff33ff'})
 
-    worksheet.conditional_format('G2:G'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'GTX', 'format':greenFMT})
-    worksheet.conditional_format('G2:G'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'RTX', 'format':greenFMT})
-    worksheet.conditional_format('G2:G'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'Radeon', 'format':redFMT})
-    worksheet.conditional_format('H2:H'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'Intel', 'format':blueFMT})
-    worksheet.conditional_format('H2:H'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'AMD', 'format':redFMT})
-    worksheet.conditional_format('E2:E'+str(productAmount+1), {'type':'text', 'criteria':'not containing', 'value':'$0.00', 'format':orangeFMT})
-    worksheet.conditional_format('F2:F'+str(productAmount+1), {'type':'2_color_scale', 'min_color':'#c98dc9', 'max_color':'#d050d0'})
-    worksheet.conditional_format('B2:H'+str(productAmount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':greyFMT})
+    worksheet.conditional_format('G2:G'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'GTX', 'format':green_fmt})
+    worksheet.conditional_format('G2:G'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'RTX', 'format':green_fmt})
+    worksheet.conditional_format('G2:G'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'Radeon', 'format':red_fmt})
+    worksheet.conditional_format('H2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'Intel', 'format':blue_fmt})
+    worksheet.conditional_format('H2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'AMD', 'format':red_fmt})
+    worksheet.conditional_format('E2:E'+str(product_amount+1), {'type':'text', 'criteria':'begins with', 'value':'0', 'format':grey_fmt})
+    worksheet.conditional_format('E2:E'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':orange_fmt})
+    for i in range(len(data['RAM'])):
+        if (data['RAM'][i] != 'Unknown'):
+            int(data['RAM'][i])
+            worksheet.conditional_format('F'+str(2+i), {'type':'text', 'criteria':'containing', 'value':'', 'format':purple_fmt})
+    #worksheet.conditional_format('F2:F'+str(product_amount+1), {'type':'2_color_scale', 'min_color':'#c98dc9', 'max_color':'#d050d0'})
+    worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
 
     writer.save()
     print("Updated excel file!")
 
     # Email stuff
-    if totalLaptops != oldTotalLaptops or totalLaptopSales != oldTotalLaptopSales:
+    if total_laptops != old_total_laptops or total_laptop_sales != old_total_laptop_sales:
         # creates SMTP session 
         email = smtplib.SMTP('smtp.gmail.com', 587) 
 
@@ -183,7 +193,7 @@ while(True):
 
         # authentication
         # compiler gives an error for wrong credential. 
-        email.login("", "") 
+        email.login("sender address", "sender password")
 
         # message to be sent
         message = '''\
@@ -191,10 +201,10 @@ From: Python Script
 Subject: *Laptop Search Update*
 %s Laptops
 %s On sale
-        ''' % (totalLaptops, totalLaptopSales)
+        ''' % (total_laptops, total_laptop_sales)
 
         # sending the mail 
-        email.sendmail("", "", message) 
+        email.sendmail("sender address", "receiver address", message) 
 
         # terminating the session 
         email.quit()
