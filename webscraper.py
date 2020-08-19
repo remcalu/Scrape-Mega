@@ -2,6 +2,7 @@
 import requests
 import pandas as pd
 import time
+import smtplib
 from email import encoders 
 from bs4 import BeautifulSoup
 
