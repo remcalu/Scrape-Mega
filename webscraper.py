@@ -208,5 +208,4 @@ Subject: *Laptop Search Update*
         email.quit()
         print("Sent email!")
     print("Done! Looping again in 20 minutes!")
-    exit()
     time.sleep(1200)
