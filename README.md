@@ -20,6 +20,7 @@ $ pip install bs4
 $ pip install lxml
 $ pip install xlsxwriter
 $ pip install jinja2
+$ pip install smtplib
 ~~~~
 
 ## Notes
