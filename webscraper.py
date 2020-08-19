@@ -1,10 +1,7 @@
 # Generate EXE with pyinstaller -F webscraper.py
 import requests
 import pandas as pd
-import numpy as np
-import smtplib 
 import time
-import re
 from email import encoders 
 from bs4 import BeautifulSoup
 
