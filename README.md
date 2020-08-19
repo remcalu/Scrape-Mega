@@ -12,15 +12,15 @@ This is a webscraper that looks for gaming laptop on the CanadaComputers website
 ![Options](https://i.imgur.com/RIVldIy.png)
 
 ## Instructions
-To be able to run the script you must have Python and Pip installed, then you must Pip installs
+To be able to run the script you must have Python and Pip installed, then you must install the following packages
 ~~~~
 $ pip install requests
+$ pip install pandas
+$ pip install bs4
+$ pip install lxml
+$ pip install xlsxwriter
+$ pip install jinja2
 ~~~~
-`<$ pip install pandas>`
-`<$ pip install bs4>`
-`<$ pip install lxml>`
-`<$ pip install xlsxwriter>`
-`<$ pip install jinja2>`
 
 ## Notes
 - You MUST enter a valid email address near the bottom of the program for it to execute
