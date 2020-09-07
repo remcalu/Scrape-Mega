@@ -3,7 +3,7 @@
 ## Author
 Remus Calugarescu
 
-## Last Modified
+## Last Major Modification
 August 18, 2020
 
 ## Purpose
