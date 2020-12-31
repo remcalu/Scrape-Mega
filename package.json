@@ -1,0 +1,23 @@
+{
+  "name": "canadacomputersworking",
+  "version": "1.0.0",
+  "description": "A CanadaComputers laptop webscraper",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/remcalu/canadacomputers-product-scraper.git"
+  },
+  "author": "Remus Calugarescu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/remcalu/canadacomputers-product-scraper/issues"
+  },
+  "homepage": "https://github.com/remcalu/canadacomputers-product-scraper#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

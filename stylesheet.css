@@ -1,0 +1,65 @@
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-spacing: 0;
+    padding: 20px;
+}
+
+th {
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.data {
+    background-color: #c7c7c7;
+    border-style: solid;
+    border: 1px solid black;
+    padding: 0;
+}
+
+.col_heading {
+    font-size: 1.1em !important;
+    text-align: center !important;
+}
+
+.col0 {
+    padding-left:10px;
+    padding-right:10px;
+    font-size: 0.8em;
+}
+
+.col1 {
+    padding-left:10px;
+    padding-right:10px;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.col2 {
+    padding-left:10px;
+    padding-right:10px;
+    text-align: right;
+}
+
+.col3 {
+    padding-left:10px;
+    padding-right:10px;
+    text-align: right;
+}
+
+.col4 {
+    text-align: center;
+    width:2%;
+}
+
+.col5 {
+    text-align: center;
+    width:12%;
+}
+
+.col6 {
+    text-align: center;
+    width:10%;
+}
