@@ -2,12 +2,15 @@ extends layout
 
 block layout-content
   div.View
-    h1.Banner WHATABYTE
-    div.Message
-      div.Title
-        h3 Making the Best
-        h1 Food For Gangs
-      span.Details Access the WHATABYTE Team Portal
+    h1.Banner Scrape Mega
+    //- label
+      input#calendar(name="Enter Date and Time" type="datetime-local")
     div.NavButtons
-      a(href="/user")
-          div.NavButton Just dive in!
+      table
+        tr
+          th
+            button#update.NavButton(type="button") Update Now
+          th
+            a(href="/download")
+              button#download.NavButton(type="button") Download Spreadsheet
+    include ../public/data.html

@@ -3,8 +3,9 @@ Required External Modules
 ************************/
 const express = require('express');
 const path = require('path');
-const http = require('http');
 const {spawn} = require('child_process');
+const glob = require('glob')
+const fs = require('fs'); //File System
 
 /************
 App Variables 
@@ -15,32 +16,24 @@ const port = process.env.PORT || "8000";
 /*****************
 Routes Definitions
 *****************/
-// Default URL for website
-app.get("/", (req, res) => {
+app.get('/', function(req, res) {
     res.render("index", { title: "Home" });
 });
 
-app.get('/', function(req, res) {
- 
-    var dataToSend;
-
+app.get('/update', function(req, res) {
     // Spawn new child process to call the python script
     const python = spawn('python', ['webscraper.py']);
-
-    // Collect data from script
-    python.stdout.on('data', function (data) {
-        console.log('Pipe data from python script ...');
-        dataToSend = data.toString();
-    });
-
-    // In close event we are sure that stream from child process is closed
-    python.on('close', function(code) {
+    // In close event we are sure that stream is from child process is closed
+    python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
-
         // Send data to browser
-        res.send(dataToSend)
+        res.send("Done")
     });
+});
 
+app.get('/download', function(req, res){
+    const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
+    res.download(file); // Set disposition and send it.
 });
 
 /****************

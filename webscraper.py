@@ -34,7 +34,7 @@ def highlight_CPU(val):
         return 'background-color: #d05050'
 
 def make_clickable(val):
-    return '<a target="_blank" href="{}">{}</a>'.format(val, val)
+    return '<a target="_blank" href="{}">Link</a>'.format(val, val)
 
 # Various computer specs
 gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m", "1080"]
@@ -154,7 +154,7 @@ try:
 
     # Write to excel
     currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
-    writer = pd.ExcelWriter("saved\datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
+    writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
     workbook = writer.book
@@ -195,13 +195,13 @@ try:
     writer.save()
     print("Created excel file at", currdatetime, "!")
 
-    df = pd.read_excel("saved\datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
+    df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     df = df.drop(columns="Unnamed: 0")
 
     df["Prices"] = df["Prices"].astype(float).map('{:.2f}'.format)
     df["Savings"] = df["Savings"].astype(float).map('{:.2f}'.format)
 
-    df.to_html("data.html")
+    df.to_html("public/data.html")
     s = df.style.applymap(highlight_savings, subset = pd.IndexSlice[:, ['Savings']])
     s = s.applymap(highlight_RAM, subset = pd.IndexSlice[:, ['RAM']])
     s = s.applymap(highlight_GPU, subset = pd.IndexSlice[:, ['GPU']])
@@ -214,23 +214,22 @@ try:
     #myhtml = myhtml.prettify()
 
     # Writing non styled file
-    with open('data.html', 'w') as contents:
+    with open('public/data.html', 'w') as contents:
         contents.write(myhtml)     
 
     # Writing some style to the file
-    with open('data.html', 'w') as contents:
+    with open('public/data.html', 'w') as contents:
         contents.write(s.render())
 
     # Writing a link to css sheet
-    with open('data.html', 'r') as contents:
+    with open('public/data.html', 'r') as contents:
         save = contents.read()
-    with open('data.html', 'w') as contents:
-        contents.write("<link rel=\"stylesheet\" href=\"stylesheet.css\">\n")
-    with open('data.html', 'a') as contents:
+    with open('public/data.html', 'w') as contents:
+        contents.write("<link rel=\"stylesheet\" href=\"style.css\">\n")
+    with open('public/data.html', 'a') as contents:
         contents.write(save)
 
-    print("Done! Looping again in 20 minutes!")
+    print("Done!")
 except Exception as e:
     print("Exception", e, "caught")
     print("Attempting to loop again in 20 minutes!")
-os.system('pause')

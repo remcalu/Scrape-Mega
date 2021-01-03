@@ -19,6 +19,8 @@
   "homepage": "https://github.com/remcalu/canadacomputers-product-scraper#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "glob": "^7.1.6",
+    "npm-check": "^5.9.2",
     "pug": "^3.0.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
-/* public/style.css */
-@import url("https://fonts.googleapis.com/css?family=Raleway:800|Merriweather+Sans|Share+Tech+Mono");
+@import url("https://fonts.googleapis.com/css?family=Nunito");
 
+/* CSS for everything else*/
 :root {
   --ui-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06),
     0 4px 5px 0 rgba(0, 0, 0, 0.06), 0 1px 10px 0 rgba(0, 0, 0, 0.08);
@@ -12,28 +12,37 @@
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
+html, body, #root {
   height: 100%;
   width: 100%;
 }
 
 body {
+  background-color: #3f4349;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: 'Nunito';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
-h1,
-h2,
-h3 {
-  font-family: "Raleway", sans-serif;
+label {
+  left: 50%;
+  top: 0%;
+  margin-top: 5%;
+  transform: translate(-50%, -50%);
+  position: relative;
+}
+
+input {
+  font-family: 'Nunito';    
+  border-radius: 10px;
+}
+
+
+h1, h2, h3 {
+  font-family: 'Nunito';
   text-transform: uppercase;
 
   padding: 0;
@@ -43,6 +52,7 @@ h3 {
 }
 
 h1 {
+  font-family: 'Nunito';
   font-size: 40px;
 }
 
@@ -72,7 +82,7 @@ a {
 
   background-size: cover;
 
-  font-family: "Merriweather Sans", sans-serif;
+  font-family: 'Nunito';
 }
 
 .Banner {
@@ -81,15 +91,19 @@ a {
   justify-content: center;
   align-items: center;
 
-  width: 100%;
+  margin: auto;
+  width: 50%;
+  margin-top: 8%;
 
   border-radius: 5px;
 
   overflow: hidden;
-  background: white;
-  padding: 15px;
+  background: #5f6670;
+  padding: 70px;
 
-  font-family: "Share Tech Mono", monospace;
+  font-family: 'Nunito';
+  font-size: 4em;
+  color: white;
 
   border-bottom: var(--ui-shadow-border);
   box-shadow: var(--ui-shadow);
@@ -116,23 +130,30 @@ a {
   display: flex;
   width: 100%;
   justify-content: space-around;
+  font-family: 'Nunito';
   align-items: center;
   padding: 0 20px;
 }
 
 .NavButton {
+  outline: none;
+  border: 0;
+  cursor: pointer;
+
+  font-family: 'Nunito';
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 10px;
 
   height: 55px;
-  width: 150px;
+  width: 250px;
 
-  background: #fa4141;
+  background:#3091db;
 
   border-radius: 30px;
 
-  font-size: 16px;
+  font-size: 22px;
   font-weight: bold;
   color: white;
 
@@ -140,4 +161,78 @@ a {
 
   border-bottom: var(--ui-shadow-border);
   box-shadow: var(--ui-shadow);
+}
+
+.NavButton:hover {
+  background-color: #39a9ff;
+}
+
+
+/* CSS For The Table */
+table {
+    font-family: 'Nunito';
+    border-spacing: 0;
+    padding: 20px;
+}
+
+.data {
+    background-color: #c7c7c7;
+    border-style: solid;
+    border: 1px solid black;
+    padding: 0;
+}
+
+.col_heading {
+    padding-bottom: 5px;
+    color: white !important;
+    font-size: 1.1em !important;
+    text-align: center !important;  
+}
+
+.row_heading {
+    padding-right: 5px;
+    color: white ;
+}
+
+.col0 {
+    color: #0000EE;
+    text-align: center;
+    padding-left:10px;
+    padding-right:10px;
+}
+
+.col1 {
+    padding-left:10px;
+    padding-right:10px;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+.col2 {
+    padding-left:10px;
+    padding-right:10px;
+    text-align: right;
+}
+
+.col3 {
+    padding-left:10px;
+    padding-right:10px;
+    text-align: right;
+}
+
+.col4 {
+    padding-left:10px;
+    padding-right:10px;
+    text-align: center;
+    width:2%;
+}
+
+.col5 {
+    text-align: center;
+    width:12%;
+}
+
+.col6 {
+    text-align: center;
+    width:10%;
 }
