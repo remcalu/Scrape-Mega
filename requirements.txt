@@ -1,6 +1,7 @@
 bs4
 Jinja2
 lxml
+selenium
 openpyxl
 numpy
 pandas
