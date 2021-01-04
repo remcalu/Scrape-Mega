@@ -1,52 +1,50 @@
 # Generate EXE with pyinstaller --onefile webscraper.py --hidden-import jinja2 --add-data C:\Users\RemCa\AppData\Local\Programs\Python\Python38-32\Lib\site-packages\pandas\io\formats\templates\html.tpl;pandas\io\formats\templates
-import requests
-import pandas as pd
-import datetime
-import os
-import re
-from bs4 import BeautifulSoup
-from selenium import webdriver
-
-##### Set price ranges here #####
-minimum = "500"
-maximum = "10000"
-##### Set price ranges here #####
-
-# Functions
-def highlight_savings(val):
-    if not re.search('[a-zA-Z]', str(val)):
-        if float(val) != 0:
-            return 'background-color: #d09950'
-
-def highlight_RAM(val):
-    if not 'Unknown' in str(val):
-        return 'background-color: #ff33ff'
-
-def highlight_GPU(val):
-    if 'GTX' in val or 'RTX' in val:
-        return 'background-color: #92D050'
-    if 'Radeon' in val:
-        return 'background-color: #d05050'
-
-def highlight_CPU(val):
-    if 'Intel' in val:
-        return 'background-color: #5074d0'
-    if 'AMD' in val:
-        return 'background-color: #d05050'
-
-def make_clickable(val):
-    return '<a target="_blank" href="{}">Link</a>'.format(val, val)
-
-# Various computer specs
-gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m", "1080"]
-fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M", "GTX 1080"]
-ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
-fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
-cpu_list = ["3750h", "4600h", "4800h", "4900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7"]
-fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7"]
-
-# Main loop that lasts forever and repeats every 20 minutes
 try:
+    import requests
+    import pandas as pd
+    import datetime
+    import re
+    from bs4 import BeautifulSoup
+
+    ##### Set price ranges here #####
+    minimum = "500"
+    maximum = "10000"
+    ##### Set price ranges here #####
+
+    # Functions
+    def highlight_savings(val):
+        if not re.search('[a-zA-Z]', str(val)):
+            if float(val) != 0:
+                return 'background-color: #d09950'
+
+    def highlight_RAM(val):
+        if not 'Unknown' in str(val):
+            return 'background-color: #ff33ff'
+
+    def highlight_GPU(val):
+        if 'GTX' in val or 'RTX' in val:
+            return 'background-color: #92D050'
+        if 'Radeon' in val:
+            return 'background-color: #d05050'
+
+    def highlight_CPU(val):
+        if 'Intel' in val:
+            return 'background-color: #5074d0'
+        if 'AMD' in val:
+            return 'background-color: #d05050'
+
+    def make_clickable(val):
+        return '<a target="_blank" href="{}">Link</a>'.format(val, val)
+
+    # Various computer specs
+    gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m", "1080"]
+    fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M", "GTX 1080"]
+    ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
+    fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
+    cpu_list = ["3750h", "4600h", "4800h", "4900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7"]
+    fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7"]
+
+    # Main loop that lasts forever and repeats every 20 minutes
     product_list_link = []
     product_list_name = []
     product_list_price = []
@@ -59,19 +57,8 @@ try:
     found = 0
     total_sales = 0
 
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
-    chrome_options.add_argument("--headless")
-    chrome_options.add_argument("--disable-dev-shm-usage")
-    chrome_options.add_argument("--no-sandbox")
-    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
-    driver.get("https://www.canadacomputers.com/welcome.php?referer=/&referer_type=SSL")
-    button = driver.find_element_by_class_name('bg-dblue')
-    button.click()
-
-
     # Getting data from Canada Computers
-    for i in range(1):
+    for i in range(50):
         check_if_products = 0
 
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
@@ -83,7 +70,6 @@ try:
         products = soup.find_all('a', 'text-dark text-truncate_3')
         for product in products:
             link = product.attrs['href']
-            print(link)
             product_list_link.append(link)
 
             product_result = requests.get(link)
@@ -166,7 +152,7 @@ try:
     data["Savings"] = data["Savings"].astype(float)
 
     # Write to excel
-    '''currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
+    currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
     writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
@@ -206,7 +192,7 @@ try:
     worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
     
     writer.save()
-    print("Created excel file at", currdatetime, "!")'''
+    print("Created excel file at", currdatetime, "!")
 
     #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     #df = df.drop(columns="Unnamed: 0")

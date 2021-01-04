@@ -25,9 +25,9 @@ app.get('/update', function(req, res) {
     const python = spawn('python', ['webscraper.py']);
     
     // For debugging python script
-    python.stdout.on('data', function(data) { 
+    /*python.stdout.on('data', function(data) { 
         console.log(data.toString()); 
-    }); 
+    });*/
 
     // In close event we are sure that stream is from child process is closed
     python.on('close', (code) => {
