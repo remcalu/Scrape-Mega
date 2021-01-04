@@ -60,7 +60,7 @@ try:
     # Getting data from Canada Computers
     for i in range(2):
         check_if_products = 0
-
+        print("reach1")
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
     
@@ -152,6 +152,7 @@ try:
     data["Savings"] = data["Savings"].astype(float)
 
     # Write to excel
+    print("reach2")
     currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
     writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
