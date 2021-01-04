@@ -77,7 +77,6 @@ try:
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
     
-        site_string_page = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price" + "&page_num=" + str(i)
         result = requests.get(site_string_page)
         source = result.content
         soup = BeautifulSoup(source, 'lxml')
