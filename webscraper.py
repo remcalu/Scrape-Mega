@@ -153,7 +153,7 @@ try:
 
     # Write to excel
     currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
-    writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
+    writer = pd.ExcelWriter("public/saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
     workbook = writer.book
@@ -194,7 +194,7 @@ try:
     writer.save()
     print("Created excel file at", currdatetime, "!")
 
-    df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
+    df = pd.read_excel("public/saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     df = df.drop(columns="Unnamed: 0")
 
     df["Prices"] = df["Prices"].astype(float).map('{:.2f}'.format)
