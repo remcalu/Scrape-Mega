@@ -15,6 +15,7 @@
 html, body, #root {
   height: 100%;
   width: 100%;
+  min-width: 750px;
 }
 
 body {
@@ -74,8 +75,6 @@ a {
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-
-  height: 100%;
   width: 100%;
 
   padding: 20px;
@@ -92,14 +91,14 @@ a {
   align-items: center;
 
   margin: auto;
-  width: 50%;
-  margin-top: 8%;
+  width: 600px;
+  margin-top: 6%;
 
   border-radius: 5px;
 
-  overflow: hidden;
   background: #5f6670;
-  padding: 70px;
+  padding-bottom:10px;
+  padding-top:10px;
 
   font-family: 'Nunito';
   font-size: 4em;
@@ -109,21 +108,8 @@ a {
   box-shadow: var(--ui-shadow);
 }
 
-.Message {
-  background: white;
-  padding: 30px;
-  border-bottom: var(--ui-shadow-border);
-  box-shadow: var(--ui-shadow);
-}
-
-.Message > .Title {
-  padding-bottom: 20px;
-}
-
-.Message > .Details {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.5em;
+.BannerText {
+  font-size: 0.4em;
 }
 
 .NavButtons {
@@ -167,6 +153,16 @@ a {
   background-color: #39a9ff;
 }
 
+.MainText {
+  font-size: 1.6em;
+  font-weight: bold;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  color: #e65449;
+}
 
 /* CSS For The Table */
 table {

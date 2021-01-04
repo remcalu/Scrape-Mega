@@ -2,15 +2,17 @@ extends layout
 
 block layout-content
   div.View
-    h1.Banner Scrape Mega
+    h1.Banner SCRAPE MEGA
+      p.BannerText Find gaming laptops with ease!
     //- label
       input#calendar(name="Enter Date and Time" type="datetime-local")
     div.NavButtons
       table
         tr
           th
-            button#update.NavButton(type="button") Update Now
+            button#update.NavButton(type="button") Update Laptop List
           th
             a(href="/download")
               button#download.NavButton(type="button") Download Spreadsheet
+    p.MainText Note: Please be patient after pressing the Update button!
     include ../public/data.html
