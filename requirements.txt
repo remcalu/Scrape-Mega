@@ -1,6 +1,5 @@
 bs4==0.0.1
 chromedriver==2.24.1
-glob3==0.0.1
 Jinja2==2.11.2
 lxml==4.5.2
 openpyxl==3.0.5
