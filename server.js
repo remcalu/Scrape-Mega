@@ -25,13 +25,13 @@ app.get('/update', function(req, res) {
     const python = spawn('python', ['webscraper.py']);
     // In close event we are sure that stream is from child process is closed
     python.stdout.on('data', function(data) { 
-        res.send(data.toString()); 
-    } ) 
-    python.on('close', (code) => {
+        console.log(data.toString()); 
+    }); 
+    /*python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
         // Send data to browser
         res.send("Done")
-    });
+    });*/
 });
 
 app.get('/download', function(req, res){
