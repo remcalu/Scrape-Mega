@@ -65,7 +65,9 @@ try:
         site_string_page = site_string_template + "&page_num=" + str(i)
     
         result = requests.get(site_string_page)
+        print(result)
         source = result.content
+        print(source)
         soup = BeautifulSoup(source, 'lxml')
         print(soup)
         products = soup.find_all('a', 'text-dark text-truncate_3')
