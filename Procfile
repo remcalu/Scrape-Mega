@@ -1,2 +1,1 @@
-worker: pip install -r requirements.txt
-worker: npm run dev
+web: pip3 install -r requirements.txt & npm run dev
