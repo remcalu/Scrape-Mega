@@ -1,5 +1,4 @@
 # Scrape Mega
-An application that scrapes the CanadaComputers website, and then displays the information on a website, or allows for the information to be downloaded as a spreadsheet
 
 ## Author
 Remus Calugarescu
