@@ -58,7 +58,7 @@ try:
     total_sales = 0
 
     # Getting data from Canada Computers
-    for i in range(1):
+    for i in range(2):
         check_if_products = 0
 
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
