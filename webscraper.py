@@ -2,7 +2,6 @@
 import requests
 import pandas as pd
 import datetime
-import os
 import re
 from bs4 import BeautifulSoup
 
