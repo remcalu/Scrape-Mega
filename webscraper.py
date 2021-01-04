@@ -228,6 +228,7 @@ try:
     with open('public/data.html', 'a') as contents:
         contents.write(save)
 
+    print("# of products scraped with BS4:", product_list_name)
     print("Done!")
 except Exception as e:
     print("Exception", e, "caught")

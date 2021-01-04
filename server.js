@@ -23,15 +23,18 @@ app.get('/', function(req, res) {
 app.get('/update', function(req, res) {
     // Spawn new child process to call the python script
     const python = spawn('python', ['webscraper.py']);
-    // In close event we are sure that stream is from child process is closed
+    
+    // For debugging python script
     python.stdout.on('data', function(data) { 
         console.log(data.toString()); 
     }); 
-    /*python.on('close', (code) => {
+
+    // In close event we are sure that stream is from child process is closed
+    python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
         // Send data to browser
         res.send("Done")
-    });*/
+    });
 });
 
 app.get('/download', function(req, res){
