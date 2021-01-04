@@ -64,15 +64,16 @@ try:
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
     
-        print(site_string_page)
+        site_string_page = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price" + "&page_num=" + str(i)
+        #print(site_string_page)
         result = requests.get(site_string_page)
-        print(result)
+        #print(result)
         source = result.content
-        print(source)
+        #print(source)
         soup = BeautifulSoup(source, 'lxml')
-        print(soup)
+        #print(soup)
         products = soup.find_all('a', 'text-dark text-truncate_3')
-        print(products)
+        #print(products)
         for product in products:
             link = product.attrs['href']
             print(link)
