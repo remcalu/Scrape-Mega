@@ -18,3 +18,9 @@ This is a webscraper that looks for gaming laptop on the CanadaComputers website
 - Node.js
 - Express
 
+## Setup Commands
+~~~~
+$ npm run dev
+$ npm run ui
+$ pip install -r requirements.txt
+~~~~
