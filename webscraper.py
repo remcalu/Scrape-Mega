@@ -64,6 +64,7 @@ try:
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
     
+        print(site_string_page)
         result = requests.get(site_string_page)
         print(result)
         source = result.content
