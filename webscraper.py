@@ -166,7 +166,7 @@ try:
     data["Savings"] = data["Savings"].astype(float)
 
     # Write to excel
-    currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
+    '''currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
     writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
@@ -206,7 +206,7 @@ try:
     worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
     
     writer.save()
-    print("Created excel file at", currdatetime, "!")
+    print("Created excel file at", currdatetime, "!")'''
 
     #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     #df = df.drop(columns="Unnamed: 0")
@@ -248,4 +248,3 @@ try:
 except Exception as e:
     print("Exception", e, "caught")
     print("Attempting to loop again in 20 minutes!")
-os.system("pause")
