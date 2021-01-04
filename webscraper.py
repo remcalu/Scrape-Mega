@@ -67,6 +67,7 @@ try:
         result = requests.get(site_string_page)
         source = result.content
         soup = BeautifulSoup(source, 'lxml')
+        print(soup)
         products = soup.find_all('a', 'text-dark text-truncate_3')
         for product in products:
             link = product.attrs['href']
