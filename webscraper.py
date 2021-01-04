@@ -154,7 +154,7 @@ try:
     # Write to excel
     print("reach2")
     currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
-    writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
+    '''writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
     workbook = writer.book
@@ -193,7 +193,7 @@ try:
     worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
     
     writer.save()
-    print("Created excel file at", currdatetime, "!")
+    print("Created excel file at", currdatetime, "!")'''
 
     #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     df = data
