@@ -58,7 +58,7 @@ try:
     total_sales = 0
 
     # Getting data from Canada Computers
-    for i in range(2):
+    for i in range(1):
         check_if_products = 0
         print("reach1")
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
@@ -195,8 +195,9 @@ try:
     writer.save()
     print("Created excel file at", currdatetime, "!")
 
-    df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
-    df = df.drop(columns="Unnamed: 0")
+    #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
+    df = data
+    #df = df.drop(columns="Unnamed: 0")
 
     df["Prices"] = df["Prices"].astype(float).map('{:.2f}'.format)
     df["Savings"] = df["Savings"].astype(float).map('{:.2f}'.format)
@@ -229,7 +230,7 @@ try:
     with open('public/data.html', 'a') as contents:
         contents.write(save)
 
-    print("# of products scraped with BS4:", product_list_name)
+    print("# of products scraped with BS4:", len(product_list_name))
     print("Done!")
 except Exception as e:
     print("Exception", e, "caught")
