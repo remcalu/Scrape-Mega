@@ -2,8 +2,10 @@
 import requests
 import pandas as pd
 import datetime
+import os
 import re
 from bs4 import BeautifulSoup
+from selenium import webdriver
 
 ##### Set price ranges here #####
 minimum = "500"
@@ -57,23 +59,29 @@ try:
     found = 0
     total_sales = 0
 
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--no-sandbox")
+    driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), chrome_options=chrome_options)
+    driver.get("https://www.canadacomputers.com/welcome.php?referer=/&referer_type=SSL")
+    button = driver.find_element_by_class_name('bg-dblue')
+    button.click()
+
+
     # Getting data from Canada Computers
     for i in range(1):
         check_if_products = 0
-        print("reach1")
+
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
     
         site_string_page = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price" + "&page_num=" + str(i)
-        #print(site_string_page)
         result = requests.get(site_string_page)
-        #print(result)
         source = result.content
-        #print(source)
         soup = BeautifulSoup(source, 'lxml')
-        #print(soup)
         products = soup.find_all('a', 'text-dark text-truncate_3')
-        #print(products)
         for product in products:
             link = product.attrs['href']
             print(link)
@@ -159,9 +167,8 @@ try:
     data["Savings"] = data["Savings"].astype(float)
 
     # Write to excel
-    print("reach2")
     currdatetime = str(datetime.datetime.now().strftime("%Y-%m-%d %H.%M.%S")) 
-    '''writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
+    writer = pd.ExcelWriter("saved/datasheet(" + currdatetime + ").xlsx",engine='xlsxwriter')
     data.to_excel(writer, sheet_name='Report')
 
     workbook = writer.book
@@ -200,11 +207,11 @@ try:
     worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
     
     writer.save()
-    print("Created excel file at", currdatetime, "!")'''
+    print("Created excel file at", currdatetime, "!")
 
     #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
-    df = data
     #df = df.drop(columns="Unnamed: 0")
+    df = data
 
     df["Prices"] = df["Prices"].astype(float).map('{:.2f}'.format)
     df["Savings"] = df["Savings"].astype(float).map('{:.2f}'.format)
@@ -242,3 +249,4 @@ try:
 except Exception as e:
     print("Exception", e, "caught")
     print("Attempting to loop again in 20 minutes!")
+os.system("pause")
