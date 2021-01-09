@@ -20,7 +20,7 @@ This is a webscraper that looks for gaming laptop on the CanadaComputers website
 
 ## Setup Commands
 ~~~~
+$ pip install -r requirements.txt
 $ npm run dev
 $ npm run ui
-$ pip install -r requirements.txt
 ~~~~
