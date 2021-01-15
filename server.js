@@ -22,6 +22,7 @@ app.get('/', function(req, res) {
 
 app.get('/update', function(req, res) {
     // Spawn new child process to call the python script
+    console.log("/update received")
     const python = spawn('python', ['webscraper.py']);
     
     // For debugging python script
@@ -31,14 +32,17 @@ app.get('/update', function(req, res) {
 
     // In close event we are sure that stream is from child process is closed
     python.on('close', (code) => {
-        console.log(`child process close all stdio with code ${code}`);
+        console.log(`Python process closed with code: ${code}`);
         // Send data to browser
+        console.log("/update responded")
         res.send("Done")
     });
 });
 
 app.get('/download', function(req, res){
+    console.log("/download received")
     const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
+    console.log("/download responded")
     res.download(file); // Set disposition and send it.
 });
 
