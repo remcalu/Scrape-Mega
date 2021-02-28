@@ -4,6 +4,8 @@ try:
     import pandas as pd
     import datetime
     import re
+    import random
+    import time
     from bs4 import BeautifulSoup
 
     ##### Set price ranges here #####
@@ -41,8 +43,8 @@ try:
     fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M", "GTX 1080", "RTX 3060Ti", "RTX 3060", "RTX 3070Ti", "RTX 3070", "RTX 3080Ti", "RTX 3080", "RTX 3090Ti", "RTX 3090"]
     ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
     fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
-    cpu_list = ["3750h", "4600h", "4800h", "4900hs", "5800h", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7", "10870h", "11370h"]
-    fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "AMD R7 5800H", "Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7", "Intel i7-10870H", "Intel i7-11370H"]
+    cpu_list = ["3750h", "4600h", "4800h", "4900hs", "5600h", "5800h", "5900hx", "5900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7", "10870h", "11370h", "10500h"]
+    fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "AMD R5 5600H", "AMD R7 5800H", "AMD R9 5900HX", "AMD R9 5900HS","Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7", "Intel i7-10870H", "Intel i7-11370H", "Intel i5-10500H"]
 
     # Main loop that lasts forever and repeats every 20 minutes
     product_list_link = []
@@ -52,7 +54,6 @@ try:
     product_list_name_cpu = []
     product_list_name_gpu = []
     product_list_name_ram = []
-
     product_amount = 0
     found = 0
     total_sales = 0
@@ -63,7 +64,7 @@ try:
 
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
-    
+        time.sleep(random.uniform(0.5, 1))
         result = requests.get(site_string_page)
         source = result.content
         soup = BeautifulSoup(source, 'lxml')
@@ -71,7 +72,7 @@ try:
         for product in products:
             link = product.attrs['href']
             product_list_link.append(link)
-
+            time.sleep(random.uniform(0.5, 1))
             product_result = requests.get(link)
             product_source = product_result.content
             product_soup = BeautifulSoup(product_source, 'lxml')
@@ -101,7 +102,7 @@ try:
 
             product_amount+=1
             check_if_products = 1
-            print("Scanned:",product_amount,"products")
+            print("Scanned:", product_amount, "products")
 
         if check_if_products == 0:
             break
@@ -232,5 +233,4 @@ try:
     print("# of products scraped with BS4:", len(product_list_name))
     print("Done!")
 except Exception as e:
-    print("Exception", e, "caught")
-    print("Attempting to loop again in 20 minutes!")
+    print("Exception", e, "caught, exiting!")
