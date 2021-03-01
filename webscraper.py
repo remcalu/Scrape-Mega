@@ -39,8 +39,8 @@ try:
         return '<a target="_blank" href="{}">Link</a>'.format(val, val)
 
     # Various computer specs
-    gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080super", "2080", "5500m", "1080", "3060ti", "3060", "3070ti", "3070", "3080ti", "3080", "3090ti", "3090"]
-    fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080 Super", "RTX 2080", "Radeon RX5500M", "GTX 1080", "RTX 3060Ti", "RTX 3060", "RTX 3070Ti", "RTX 3070", "RTX 3080Ti", "RTX 3080", "RTX 3090Ti", "RTX 3090"]
+    gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080", "5500m", "1080", "3060ti", "3060", "3070ti", "3070", "3080ti", "3080", "3090ti", "3090"]
+    fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080", "Radeon RX5500M", "GTX 1080", "RTX 3060Ti", "RTX 3060", "RTX 3070Ti", "RTX 3070", "RTX 3080Ti", "RTX 3080", "RTX 3090Ti", "RTX 3090"]
     ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
     fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
     cpu_list = ["3750h", "4600h", "4800h", "4900hs", "5600h", "5800h", "5900hx", "5900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7", "10870h", "11370h", "10500h"]
@@ -61,10 +61,9 @@ try:
     # Getting data from Canada Computers
     for i in range(50):
         check_if_products = 0
-
         site_string_template = "https://www.canadacomputers.com/search/results_details.php?language=en&keywords=gaming%20laptop&isort=price&pr=%2524"+minimum+"%2B-%2B%2524"+maximum+"&"
         site_string_page = site_string_template + "&page_num=" + str(i)
-        time.sleep(random.uniform(0.5, 1))
+        time.sleep(random.uniform(0.40, 0.75))
         result = requests.get(site_string_page)
         source = result.content
         soup = BeautifulSoup(source, 'lxml')
@@ -72,23 +71,25 @@ try:
         for product in products:
             link = product.attrs['href']
             product_list_link.append(link)
-            time.sleep(random.uniform(0.5, 1))
+            time.sleep(random.uniform(0.40, 0.75))
             product_result = requests.get(link)
             product_source = product_result.content
             product_soup = BeautifulSoup(product_source, 'lxml')
-
             descriptions = product_soup.find_all('h1')
+
+            # Collecting descriptions
             for description in descriptions:
                 if "gaming" in description.text.lower() or "laptop" in description.text.lower() or "notebook" in description.text.lower():
-                    #print(description.text)
                     product_list_name.append(description.text)
 
+            # Collecting prices
             prices = product_soup.find_all('strong')
             for price in prices:
                 if "$" in price.text:
                     price = price.text[1:].replace(",", "")
                     product_list_price.append(price)
 
+            # Collecting sales prices
             savings = product_soup.find_all('div', 'pi-price-discount')
             for saving in savings:
                 if "$" in saving.text:
@@ -97,6 +98,7 @@ try:
                     discount = discount[1:].replace(",", "")
                     product_list_saving.append(discount)
                     total_sales+=1
+
             if not savings:
                 product_list_saving.append("0.00")
 
@@ -111,7 +113,7 @@ try:
     product_list_name_copy = product_list_name.copy()
     for i in range(product_amount):
         product_list_name_copy[i] = product_list_name_copy[i].replace(" ", "")
-        
+
         # For RAM
         for j in range(len(ram_list)):
             if ram_list[j] in product_list_name_copy[i].lower():
@@ -128,6 +130,10 @@ try:
                 product_list_name_gpu.append(fancy_gpu_list[j])
                 found = 1
                 break
+        if "max-q" in product_list_name_copy[i].lower():
+            product_list_name_gpu[-1] = product_list_name_gpu[-1] + " Max-Q"
+        if "super" in product_list_name_copy[i].lower():
+            product_list_name_gpu[-1] = product_list_name_gpu[-1] + " Super"
         if found == 0:
             product_list_name_gpu.append("Unknown")
         found = 0
@@ -232,5 +238,7 @@ try:
 
     print("# of products scraped with BS4:", len(product_list_name))
     print("Done!")
+    #time.sleep(1000)
 except Exception as e:
     print("Exception", e, "caught, exiting!")
+    #time.sleep(1000)
