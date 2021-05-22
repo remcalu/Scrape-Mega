@@ -76,11 +76,8 @@ a {
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-
   padding: 20px;
-
   background-size: cover;
-
   font-family: 'Nunito';
 }
 
@@ -89,21 +86,16 @@ a {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   margin: auto;
   width: 600px;
   margin-top: 6%;
-
   border-radius: 5px;
-
   background: #5f6670;
   padding-bottom:10px;
   padding-top:10px;
-
   font-family: 'Nunito';
   font-size: 4em;
   color: white;
-
   border-bottom: var(--ui-shadow-border);
   box-shadow: var(--ui-shadow);
 }
@@ -125,26 +117,19 @@ a {
   outline: none;
   border: 0;
   cursor: pointer;
-
   font-family: 'Nunito';
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px;
-
   height: 55px;
   width: 250px;
-
   background:#3091db;
-
   border-radius: 30px;
-
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   color: white;
-
   text-transform: capitalize;
-
   border-bottom: var(--ui-shadow-border);
   box-shadow: var(--ui-shadow);
 }
@@ -231,4 +216,25 @@ table {
 .col6 {
     text-align: center;
     width:10%;
+}
+
+.Banner {
+    margin-top: 2%;
+}
+
+img {
+    padding:10%;
+    width:60px;
+    height:60px;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    margin: auto;
+    padding: 10px;
+    filter: invert(1);
 }

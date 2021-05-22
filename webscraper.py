@@ -39,12 +39,12 @@ try:
         return '<a target="_blank" href="{}">Link</a>'.format(val, val)
 
     # Various computer specs
-    gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080", "5500m", "1080", "3060ti", "3060", "3070ti", "3070", "3080ti", "3080", "3090ti", "3090"]
-    fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080", "Radeon RX5500M", "GTX 1080", "RTX 3060Ti", "RTX 3060", "RTX 3070Ti", "RTX 3070", "RTX 3080Ti", "RTX 3080", "RTX 3090Ti", "RTX 3090"]
+    gpu_list = ["1050ti", "1050", "1060ti", "1060", "1070ti", "1070", "1650ti", "1650", "1660ti", "1660", "2050ti", "2050", "2060ti", "2060", "2070ti", "2070", "2080ti", "2080", "5500m", "1080", "3060ti", "3060", "3070ti", "3070", "3080ti", "3080", "3090ti", "3090", "3050ti", "3050"]
+    fancy_gpu_list = ["GTX 1050Ti", "GTX 1050", "GTX 1060Ti", "GTX 1060", "GTX 1070Ti", "GTX 1070", "GTX 1650Ti", "GTX 1650", "GTX 1660Ti", "GTX 1660", "RTX 2050Ti", "RTX 2050", "RTX 2060Ti", "RTX 2060", "RTX 2070Ti", "RTX 2070", "RTX 2080Ti", "RTX 2080", "Radeon RX5500M", "GTX 1080", "RTX 3060Ti", "RTX 3060", "RTX 3070Ti", "RTX 3070", "RTX 3080Ti", "RTX 3080", "RTX 3090Ti", "RTX 3090", "RTX 3050Ti", "RTX 3050"]
     ram_list = ["64gb", "64g", "32gb", "32g", "16gb", "16g", "8gb", "8g", "12gb", "12g"]
     fancy_ram_list = ["64", "64", "32", "32", "16", "16", "8", "8", "12", "12"]
-    cpu_list = ["3750h", "4600h", "4800h", "4900hs", "5600h", "5800h", "5900hx", "5900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7", "10870h", "11370h", "10500h"]
-    fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "AMD R5 5600H", "AMD R7 5800H", "AMD R9 5900HX", "AMD R9 5900HS","Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7", "Intel i7-10870H", "Intel i7-11370H", "Intel i5-10500H"]
+    cpu_list = ["3750h", "4600h", "4800h", "4900hs", "5600h", "5800h", "5900hx", "5900hs", "7700hq", "8300h", "8550u", "8750h", "9300h", "9750h", "10300h", "10750h", "10875h", "10980hk", "1065g7", "1185g7", "10870h", "11370h", "10500h", "10200h", "11375h", "11800h", "11400h", "11980hk"]
+    fancy_cpu_list = ["AMD R7 3750H", "AMD R5 4600H", "AMD R7 4800H", "AMD R9 4900HS", "AMD R5 5600H", "AMD R7 5800H", "AMD R9 5900HX", "AMD R9 5900HS","Intel i7-7700HQ", "Intel i5-8300H","Intel i7-8550U", "Intel i7-8750H", "Intel i5-9300H", "Intel i7-9750H", "Intel i5-10300H", "Intel i7-10750H", "Intel i7-10875H", "Intel i9-10980HK", "Intel i7-1065G7", "Intel i7-1185G7", "Intel i7-10870H", "Intel i7-11370H", "Intel i5-10500H", "Intel i5-10200H", "Intel i7-11375H", "Intel i7-11800H", "Intel i5-11400H", "Intel i9-11980HK"]
 
     # Main loop that lasts forever and repeats every 20 minutes
     product_list_link = []
@@ -57,7 +57,7 @@ try:
     product_amount = 0
     found = 0
     total_sales = 0
-
+    
     # Getting data from Canada Computers
     for i in range(50):
         check_if_products = 0
@@ -104,10 +104,14 @@ try:
 
             product_amount+=1
             check_if_products = 1
-            print("Scanned:", product_amount, "products")
-
+            print("Scanned: ", product_amount, " products", sep='')
         if check_if_products == 0:
             break
+
+    # Checking if at least 1 product was scraped
+    if len(product_list_name) == 0:
+        print("Error, no products were scanned")
+        quit()
 
     # Cleaning up the data that will be pushed to the spreadsheet
     product_list_name_copy = product_list_name.copy()
@@ -199,7 +203,7 @@ try:
     worksheet.conditional_format('B2:H'+str(product_amount+1), {'type':'text', 'criteria':'containing', 'value':'', 'format':grey_fmt})
     
     writer.save()
-    print("Created excel file at", currdatetime, "!")
+    print("Check datasheet(", currdatetime, ").xlsx", sep='')
 
     #df = pd.read_excel("saved/datasheet(" + currdatetime + ").xlsx", engine='openpyxl')
     #df = df.drop(columns="Unnamed: 0")
@@ -236,9 +240,8 @@ try:
     with open('public/data.html', 'a') as contents:
         contents.write(save)
 
-    print("# of products scraped with BS4:", len(product_list_name))
-    print("Done!")
+    print("Scraped ", len(product_list_name), " products!", sep='')
     #time.sleep(1000)
 except Exception as e:
-    print("Exception", e, "caught, exiting!")
+    print("Exception ", e, " caught, exiting!", sep='')
     #time.sleep(1000)

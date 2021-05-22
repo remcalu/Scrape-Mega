@@ -2,18 +2,25 @@ extends layout
 
 block layout-content
   div.View
+    nav.navbar.navbar-expand-lg.navbar-light.sticky
+      a(href='https://www.linkedin.com/in/remuscalugarescu/' target='_blank')
+        img(src='/linkedin.svg')
+      a(href='https://github.com/remcalu')
+        img(src='/github.svg')
+      a(href='mailto:rcalugar@uoguelph.ca' target='_blank')
+        img(src='/email.svg')
+      a(href='https://www.facebook.com/remus.calugarescu.9/' target='_blank')
+        img(src='/facebook.svg')
+      a(href='https://twitter.com/agriculturerc' target='_blank')
+        img(src='/twitter.svg')
     h1.Banner SCRAPE MEGA
       p.BannerText Find gaming laptops with ease!
-    //- label
-      input#calendar(name="Enter Date and Time" type="datetime-local")
     div.NavButtons
       table
         tr
           th
             button#update.NavButton(type="button") Update Laptop List
-            
           th
             a(href="/download")
               button#download.NavButton(type="button") Download Latest Sheet
-    //- p.MainText Note: Please be patient after pressing the Update button!
     include ../public/data.html

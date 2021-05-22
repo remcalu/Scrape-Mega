@@ -5,13 +5,18 @@ const express = require('express');
 const path = require('path');
 const {spawn} = require('child_process');
 const glob = require('glob')
-const fs = require('fs'); //File System
+const fs = require('fs');
 
 /************
 App Variables 
 ************/
+const sec = 1000;
 const app = express();
 const port = process.env.PORT || "8000";
+const http = require('http');
+const server = http.createServer(app);
+const {Server} = require("socket.io");
+const io = new Server(server);
 
 /*****************
 Routes Definitions
@@ -21,35 +26,51 @@ app.get('/', function(req, res) {
 });
 
 app.get('/update', function(req, res) {
-    // Spawn new child process to call the python script
+    /* Spawn new child process to call the python script */
+    req.setTimeout(0) // no timeout for all requests, your server will be DoS'd
     console.log("/update received")
     const python = spawn('python', ['webscraper.py']);
-    
-    // For debugging python script
-    /*python.stdout.on('data', function(data) { 
-        console.log(data.toString()); 
-    });*/
+    var pythonData;
 
-    // In close event we are sure that stream is from child process is closed
-    python.on('close', (code) => {
-        console.log(`Python process closed with code: ${code}`);
-        // Send data to browser
+    /* Getting python script output */
+    python.stdout.on('data', function(data) { 
+        pythonData = data.toString().slice();
+    });
+    
+    /* In close event we are sure that stream is from child process is closed */
+    python.on('exit', (code) => {
         console.log("/update responded")
-        res.send("Done")
+        if (pythonData != undefined) {
+            pythonData = pythonData.slice(0, pythonData.length - 2);
+            if (pythonData == "Error, no products were scanned") {
+                code = -1;
+            }
+        }
+
+        if (code == -1) {
+            console.log(`Python process closed with code: ${code}, no products error!`);
+            res.status(490).send("Error490");
+        } else if (code != 0) {
+            console.log(`Python process closed with code: ${code}, general error!`);
+            res.status(491).send("Error491");
+        } else {
+            console.log(`Python process closed with code: ${code}, success!`);
+            res.send("Success");
+        }  
     });
 });
 
-app.get('/download', function(req, res){
-    console.log("/download received")
-    const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
-    console.log("/download responded")
-    res.download(file); // Set disposition and send it.
+app.get('/download', function(req, res) {
+    console.log("/download received");
+    const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name;
+    console.log("/download responded");
+    res.download(file);
 });
 
 /****************
 Server Activation
 ****************/
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Listening to requests on http://localhost:${port}`);
 });
 
