@@ -21,7 +21,7 @@
     "express": "^4.17.1",
     "glob": "^7.1.6",
     "npm-check": "^5.9.2",
-    "pug": "^3.0.0",
+    "pug": "^3.0.1",
     "socket.io": "^4.0.1"
   },
   "devDependencies": {
