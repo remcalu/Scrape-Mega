@@ -10,13 +10,10 @@ const fs = require('fs');
 /************
 App Variables 
 ************/
-const sec = 1000;
 const app = express();
 const port = process.env.PORT || "8000";
 const http = require('http');
 const server = http.createServer(app);
-const {Server} = require("socket.io");
-const io = new Server(server);
 
 /*****************
 Routes Definitions
