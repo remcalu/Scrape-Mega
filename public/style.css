@@ -149,6 +149,11 @@ a {
   color: #e65449;
 }
 
+.TimeText {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 /* CSS For The Table */
 table {
     font-family: 'Nunito';

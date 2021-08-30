@@ -4,15 +4,15 @@ block layout-content
   div.View
     nav.navbar.navbar-expand-lg.navbar-light.sticky
       a(href='https://www.linkedin.com/in/remuscalugarescu/' target='_blank')
-        img(src='/linkedin.svg')
-      a(href='https://github.com/remcalu')
-        img(src='/github.svg')
+        img(src='media/linkedin.svg')
+      a(href='https://github.com/remcalu/' target="_blank")
+        img(src='media/github.svg')
       a(href='mailto:rcalugar@uoguelph.ca' target='_blank')
-        img(src='/email.svg')
+        img(src='media/email.svg')
       a(href='https://www.facebook.com/remus.calugarescu.9/' target='_blank')
-        img(src='/facebook.svg')
+        img(src='media/facebook.svg')
       a(href='https://twitter.com/agriculturerc' target='_blank')
-        img(src='/twitter.svg')
+        img(src='media/twitter.svg')
     h1.Banner SCRAPE MEGA
       p.BannerText Find gaming laptops with ease!
     div.NavButtons
@@ -23,4 +23,6 @@ block layout-content
           th
             a(href="/download")
               button#download.NavButton(type="button") Download Latest Sheet
+    div.MainText
+      p#time.TimeText Data Last Updated: Never
     include ../public/data.html

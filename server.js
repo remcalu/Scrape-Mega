@@ -22,12 +22,26 @@ app.get('/', function(req, res) {
     res.render("index", { title: "Home" });
 });
 
-app.get('/update', function(req, res) {
+/* Check for files */
+app.get('/checkforfiles', (req, res) => {
+    let newestFile = "";
+    newestFile = glob.sync('saved/*xlsx').map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
+    newestFile = newestFile.replace(/\./g,':').slice(16).slice(0, -6); 
+
+    /* Creating json object with the information */
+    let jsonObject = new Object();
+    jsonObject["LastUpdated"] = newestFile;
+    let jsonString = JSON.stringify(jsonObject);
+    res.status(200).send(jsonString);
+});
+
+/* Scrape new information */
+app.get('/update', (req, res) => {
+
     /* Spawn new child process to call the python script */
-    req.setTimeout(0) // no timeout for all requests, your server will be DoS'd
     console.log("/update received")
-    const python = spawn('python', ['webscraper.py']);
-    var pythonData;
+    const python = spawn('python3', ['webscraper.py']);
+    let pythonData;
 
     /* Getting python script output */
     python.stdout.on('data', function(data) { 
@@ -57,7 +71,8 @@ app.get('/update', function(req, res) {
     });
 });
 
-app.get('/download', function(req, res) {
+/* Download the latest spreadsheet */
+app.get('/download', (req, res) => {
     console.log("/download received");
     const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name;
     console.log("/download responded");
