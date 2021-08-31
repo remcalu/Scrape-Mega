@@ -24,9 +24,20 @@ app.get('/', function(req, res) {
 
 /* Check for files */
 app.get('/checkforfiles', (req, res) => {
+
+    /* Check number of files excluding the gitkeep file */
+    let numSpreadsheets = 0;
+    fs.readdirSync("saved").forEach(file => {
+        if(file != ".gitkeep") {
+            numSpreadsheets++;
+        }
+    });
+
     let newestFile = "";
-    newestFile = glob.sync('saved/*xlsx').map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
-    newestFile = newestFile.replace(/\./g,':').slice(16).slice(0, -6); 
+    if(numSpreadsheets != 0) {
+        newestFile = glob.sync('saved/*xlsx').map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name
+        newestFile = newestFile.replace(/\./g,':').slice(16).slice(0, -6); 
+    }
 
     /* Creating json object with the information */
     let jsonObject = new Object();
@@ -60,10 +71,10 @@ app.get('/update', (req, res) => {
 
         if (code == -1) {
             console.log(`Python process closed with code: ${code}, no products error!`);
-            res.status(490).send("Error490");
+            res.status(490).send(`Error490: No products error exit code - ${code}`);
         } else if (code != 0) {
             console.log(`Python process closed with code: ${code}, general error!`);
-            res.status(491).send("Error491");
+            res.status(491).send(`Error491: General python error exit code - ${code}`);
         } else {
             console.log(`Python process closed with code: ${code}, success!`);
             res.send("Success");
@@ -74,9 +85,21 @@ app.get('/update', (req, res) => {
 /* Download the latest spreadsheet */
 app.get('/download', (req, res) => {
     console.log("/download received");
-    const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name;
-    console.log("/download responded");
-    res.download(file);
+        /* Check number of files excluding the gitkeep file */
+        let numSpreadsheets = 0;
+        fs.readdirSync("saved").forEach(file => {
+            if(file != ".gitkeep") {
+                numSpreadsheets++;
+            }
+        });
+
+    if(numSpreadsheets != 0) {
+        const file = glob.sync(`${__dirname}/saved/*xlsx`).map(name => ({name, ctime: fs.statSync(name).ctime})).sort((a, b) => b.ctime - a.ctime)[0].name;
+        console.log("/download responded");
+        res.download(file);
+    } else {
+        res.status(492).send("Error492: No spreadsheets currently exist");
+    }
 });
 
 /****************
