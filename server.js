@@ -51,7 +51,7 @@ app.get('/update', (req, res) => {
 
     /* Spawn new child process to call the python script */
     console.log("/update received")
-    const python = spawn('python3', ['webscraper.py']);
+    const python = spawn('python', ['webscraper.py']);
     let pythonData;
 
     /* Getting python script output */
